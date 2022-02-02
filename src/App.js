@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Grid } from "@mui/material";
-import Header from "./Header";
-import UserList from "./UserList";
-import AddUserModal from "./AddUserModal";
-import startingUsersList from "./startingUsersList";
+import Header from "./components/Header";
+import UserList from "./components/UserList";
+import AddUserModal from "./components/AddUserModal";
+import startingUsersList from "./components/startingUsersList";
 
 export default function App() {
   const [users, setUsersState] = useState(startingUsersList);
