@@ -30,6 +30,10 @@ export default function App() {
     setUsersState(usersCopy);
   };
 
+  const editUser = (id) => {
+    console.log(id, "edit user");
+  };
+
   return (
     <div>
       <Grid container>
@@ -40,6 +44,7 @@ export default function App() {
             userList={users}
             updateStatus={updateUserStatus}
             deleteUser={deleteUser}
+            editUser={editUser}
           />
         </Grid>
         <Grid item xs={3} />

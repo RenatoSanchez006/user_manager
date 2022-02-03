@@ -1,7 +1,7 @@
 import { Typography, Grid, Avatar } from "@mui/material";
 import UserActions from "./UserActions";
 
-export default function User({ user, updateStatus, deleteUser }) {
+export default function User({ user, editUser, updateStatus, deleteUser }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={2}>
@@ -18,6 +18,7 @@ export default function User({ user, updateStatus, deleteUser }) {
       <Grid item xs={3}>
         <UserActions
           status={user.isActive}
+          editUser={editUser}
           updateStatus={updateStatus}
           deleteUser={deleteUser}
           id={user.id}
