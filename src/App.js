@@ -21,12 +21,12 @@ export default function App() {
 
   const updateUserStatus = (id, newStatus) => {
     const usersCopy = [...users];
-    usersCopy.find((user) => user.id == id).isActive = newStatus;
+    usersCopy.find((user) => user.id === id).isActive = newStatus;
     setUsersState(usersCopy);
   };
 
   const deleteUser = (id) => {
-    const usersCopy = users.filter((user) => user.id != id);
+    const usersCopy = users.filter((user) => user.id !== id);
     setUsersState(usersCopy);
   };
 
