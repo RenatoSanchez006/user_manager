@@ -11,11 +11,6 @@ export default function UserActions({
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
-        <IconButton color="primary" onClick={() => editUser(id)}>
-          <Edit fontSize="small" />
-        </IconButton>
-      </Grid>
-      <Grid item xs={4}>
         {status ? (
           <IconButton color="success" onClick={() => updateStatus(id, false)}>
             <Check fontSize="small" />
@@ -25,6 +20,11 @@ export default function UserActions({
             <Close fontSize="small" />
           </IconButton>
         )}
+      </Grid>
+      <Grid item xs={4}>
+        <IconButton color="primary" onClick={() => editUser(id)}>
+          <Edit fontSize="small" />
+        </IconButton>
       </Grid>
       <Grid item xs={4}>
         <IconButton color="error" onClick={() => deleteUser(id)}>
