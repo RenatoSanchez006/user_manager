@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -8,38 +7,25 @@ import {
   Button,
   DialogContentText,
 } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
 
-const emptyNewUser = {
-  id: "",
-  name: "",
-  lastName: "",
-  email: "",
-  image: "",
-  isActive: true,
-};
-
-export default function AddUserModal({ open, close }) {
-  const [newUser, setNewUserState] = useState(emptyNewUser);
-
+export default function AddUserModal({
+  modalState,
+  close,
+  user,
+  modalUserHandler,
+}) {
   const submitFormHandler = (e) => {
     e.preventDefault();
-    setNewUserState({
-      name: e.target.name.value,
-      lastName: e.target.lastName.value,
-      email: e.target.email.value,
-      image: e.target.image.value,
-    });
-    if (!newUser.name || !newUser.lastName || !newUser.email) {
-      return alert("Fill all the fields");
-    }
-    const newUserCopy = { ...newUser };
-    setNewUserState(emptyNewUser);
-    close({ ...newUserCopy, id: uuidv4() });
+    close(true, modalState.modalEdition);
   };
 
   return (
-    <Dialog open={open} onClose={() => close(0)} fullWidth={true} maxWidth="xs">
+    <Dialog
+      open={modalState.modalOpen}
+      onClose={() => close(false)}
+      fullWidth={true}
+      maxWidth="xs"
+    >
       <form onSubmit={(e) => submitFormHandler(e)}>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
@@ -55,9 +41,8 @@ export default function AddUserModal({ open, close }) {
             type="text"
             fullWidth
             variant="standard"
-            onChange={(e) =>
-              setNewUserState({ ...newUser, name: e.target.value })
-            }
+            value={user.name}
+            onChange={(e) => modalUserHandler({ name: e.target.value })}
           />
           <TextField
             required
@@ -67,9 +52,8 @@ export default function AddUserModal({ open, close }) {
             type="text"
             fullWidth
             variant="standard"
-            onChange={(e) =>
-              setNewUserState({ ...newUser, lastName: e.target.value })
-            }
+            value={user.lastName}
+            onChange={(e) => modalUserHandler({ lastName: e.target.value })}
           />
           <TextField
             required
@@ -79,24 +63,22 @@ export default function AddUserModal({ open, close }) {
             type="email"
             fullWidth
             variant="standard"
-            onChange={(e) =>
-              setNewUserState({ ...newUser, email: e.target.value })
-            }
+            value={user.email}
+            onChange={(e) => modalUserHandler({ email: e.target.value })}
           />
           <TextField
             margin="dense"
             id="image"
             label="Profile Photo"
-            type="url"
+            type="text"
             fullWidth
             variant="standard"
-            onChange={(e) =>
-              setNewUserState({ ...newUser, image: e.target.value })
-            }
+            value={user.image}
+            onChange={(e) => modalUserHandler({ image: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => close(0)}>Cancel</Button>
+          <Button onClick={() => close(false)}>Cancel</Button>
           <Button type="submit">Save</Button>
         </DialogActions>
       </form>

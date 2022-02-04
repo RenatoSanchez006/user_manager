@@ -4,19 +4,44 @@ import Header from "./components/Header";
 import UserList from "./components/UserList";
 import AddUserModal from "./components/AddUserModal";
 import startingUsersList from "./components/startingUsersList";
+import { v4 as uuidv4 } from "uuid";
+
+const emptyNewUser = {
+  id: "",
+  name: "",
+  lastName: "",
+  email: "",
+  image: "",
+  isActive: true,
+};
 
 export default function App() {
   const [users, setUsersState] = useState(startingUsersList);
-  const [modalOpen, setModalOpenState] = useState(false);
+  const [modalState, setModalState] = useState({
+    modalOpen: false,
+    modalEdition: false,
+  });
+  const [userModal, setUserModalState] = useState(emptyNewUser);
 
   const openHandleModal = () => {
-    setModalOpenState(true);
+    setUserModalState(emptyNewUser);
+    setModalState({ modalOpen: true, modalEdition: false });
   };
 
-  const modalHandleClose = (newUser) => {
-    setModalOpenState(false);
-    if (!newUser) return;
-    setUsersState([...users, newUser]);
+  const modalHandleClose = (saving, isEdition) => {
+    setModalState({ modalOpen: false, modalEdition: false });
+    if (!saving) return;
+
+    if (!isEdition) {
+      // Add new user
+      setUsersState([...users, { ...userModal, id: uuidv4() }]);
+    } else {
+      // Edit User in List
+      const userIndex = users.findIndex((user) => user.id === userModal.id);
+      let usersCopy = [...users];
+      usersCopy[userIndex] = userModal;
+      setUsersState(usersCopy);
+    }
   };
 
   const updateUserStatus = (id, newStatus) => {
@@ -30,8 +55,13 @@ export default function App() {
     setUsersState(usersCopy);
   };
 
-  const editUser = (id) => {
-    console.log(id, "edit user");
+  const editUserHandler = (id) => {
+    setUserModalState(users.filter((user) => user.id === id)[0]);
+    setModalState({ modalOpen: true, modalEdition: true });
+  };
+
+  const modalUserHandler = (newValue) => {
+    setUserModalState({ ...userModal, ...newValue });
   };
 
   return (
@@ -44,12 +74,17 @@ export default function App() {
             userList={users}
             updateStatus={updateUserStatus}
             deleteUser={deleteUser}
-            editUser={editUser}
+            editUser={editUserHandler}
           />
         </Grid>
         <Grid item xs={3} />
       </Grid>
-      <AddUserModal open={modalOpen} close={modalHandleClose} />
+      <AddUserModal
+        modalState={modalState}
+        close={modalHandleClose}
+        user={userModal}
+        modalUserHandler={modalUserHandler}
+      />
     </div>
   );
 }
