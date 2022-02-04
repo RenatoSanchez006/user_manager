@@ -6,7 +6,9 @@ import {
   TextField,
   Button,
   DialogContentText,
+  Typography,
 } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 export default function AddUserModal({
   modalState,
@@ -76,6 +78,7 @@ export default function AddUserModal({
             value={user.image}
             onChange={(e) => modalUserHandler({ image: e.target.value })}
           />
+          <Typography color={grey[500]} variant="caption" >*Required</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => close(false)}>Cancel</Button>

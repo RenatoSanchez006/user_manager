@@ -1,5 +1,6 @@
 import { Grid, IconButton } from "@mui/material";
 import { Check, Close, Delete, Edit } from "@mui/icons-material";
+import { grey } from "@mui/material/colors";
 
 export default function UserActions({
   status,
@@ -16,7 +17,10 @@ export default function UserActions({
             <Check fontSize="small" />
           </IconButton>
         ) : (
-          <IconButton color="secondary" onClick={() => updateStatus(id, true)}>
+          <IconButton
+            sx={{ color: grey[700] }}
+            onClick={() => updateStatus(id, true)}
+          >
             <Close fontSize="small" />
           </IconButton>
         )}
