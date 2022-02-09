@@ -1,25 +1,16 @@
-import { Grid } from "@mui/material";
+import { useContext } from "react";
+import { userContext } from "../context/user-context";
 import User from "./User";
+import { Grid } from "@mui/material";
 
-export default function UserList({
-  userList,
-  editUser,
-  deleteUser,
-  updateStatus,
-}) {
+export default function UserList() {
+  const { users } = useContext(userContext);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        {userList.map((user) => {
-          return (
-            <User
-              key={user.id}
-              user={user}
-              editUser={editUser}
-              updateStatus={updateStatus}
-              deleteUser={deleteUser}
-            />
-          );
+        {users.map((user) => {
+          return <User key={user.id} user={user} />;
         })}
       </Grid>
     </Grid>

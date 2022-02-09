@@ -1,67 +1,24 @@
-import { useState } from "react";
-import { Grid } from "@mui/material";
+import { useState, useContext, useEffect } from "react";
+import { userContext } from './context/user-context'
 import Header from "./components/Header";
 import UserList from "./components/UserList";
 import AddUserModal from "./components/AddUserModal";
-import startingUsersList from "./components/startingUsersList";
-import { v4 as uuidv4 } from "uuid";
-
-const emptyNewUser = {
-  id: "",
-  name: "",
-  lastName: "",
-  email: "",
-  image: "",
-  isActive: true,
-};
+import { Grid } from "@mui/material";
 
 export default function App() {
-  const [users, setUsersState] = useState(startingUsersList);
-  const [modalState, setModalState] = useState({
-    modalOpen: false,
-    modalEdition: false,
-  });
-  const [userModal, setUserModalState] = useState(emptyNewUser);
+  const { users, isEdition } = useContext(userContext);
+  const [modalOpen, setModalOpenState] = useState(false);
+
+  useEffect(() => {
+    isEdition ? setModalOpenState(true) : setModalOpenState(false)
+  }, [isEdition])
 
   const openHandleModal = () => {
-    setUserModalState(emptyNewUser);
-    setModalState({ modalOpen: true, modalEdition: false });
+    setModalOpenState(true);
   };
 
-  const modalHandleClose = (saving, isEdition) => {
-    setModalState({ modalOpen: false, modalEdition: false });
-    if (!saving) return;
-
-    if (!isEdition) {
-      // Add new user
-      setUsersState([...users, { ...userModal, id: uuidv4() }]);
-    } else {
-      // Edit User in List
-      const userIndex = users.findIndex((user) => user.id === userModal.id);
-      let usersCopy = [...users];
-      usersCopy[userIndex] = userModal;
-      setUsersState(usersCopy);
-    }
-  };
-
-  const updateUserStatus = (id, newStatus) => {
-    const usersCopy = [...users];
-    usersCopy.find((user) => user.id === id).isActive = newStatus;
-    setUsersState(usersCopy);
-  };
-
-  const deleteUser = (id) => {
-    const usersCopy = users.filter((user) => user.id !== id);
-    setUsersState(usersCopy);
-  };
-
-  const editUserHandler = (id) => {
-    setUserModalState(users.filter((user) => user.id === id)[0]);
-    setModalState({ modalOpen: true, modalEdition: true });
-  };
-
-  const modalUserHandler = (newValue) => {
-    setUserModalState({ ...userModal, ...newValue });
+  const modalHandleClose = () => {
+    setModalOpenState(false);
   };
 
   return (
@@ -70,20 +27,13 @@ export default function App() {
         <Grid item xs={3} />
         <Grid item xs={6}>
           <Header userCount={users.length} addUser={openHandleModal} />
-          <UserList
-            userList={users}
-            updateStatus={updateUserStatus}
-            deleteUser={deleteUser}
-            editUser={editUserHandler}
-          />
+          <UserList />
         </Grid>
         <Grid item xs={3} />
       </Grid>
       <AddUserModal
-        modalState={modalState}
+        modalOpen={modalOpen}
         close={modalHandleClose}
-        user={userModal}
-        modalUserHandler={modalUserHandler}
       />
     </div>
   );

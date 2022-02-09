@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { userContext } from "../context/user-context";
 import {
   Dialog,
   DialogTitle,
@@ -10,21 +12,34 @@ import {
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-export default function AddUserModal({
-  modalState,
-  close,
-  user,
-  modalUserHandler,
-}) {
+export default function AddUserModal({ modalOpen, close }) {
+  const {
+    emptyNewUser,
+    setIsEditionState,
+    userModal,
+    setUserModalState,
+    modalUserHandler,
+    isEdition,
+    addUser,
+    editUser,
+  } = useContext(userContext);
+
   const submitFormHandler = (e) => {
     e.preventDefault();
-    close(true, modalState.modalEdition);
+    !isEdition ? addUser() : editUser();
+    handleModalClose();
+  };
+
+  const handleModalClose = () => {
+    setIsEditionState(false);
+    setUserModalState(emptyNewUser);
+    close();
   };
 
   return (
     <Dialog
-      open={modalState.modalOpen}
-      onClose={() => close(false)}
+      open={modalOpen}
+      onClose={handleModalClose}
       fullWidth={true}
       maxWidth="xs"
     >
@@ -43,7 +58,7 @@ export default function AddUserModal({
             type="text"
             fullWidth
             variant="standard"
-            value={user.name}
+            value={userModal.name}
             onChange={(e) => modalUserHandler({ name: e.target.value })}
           />
           <TextField
@@ -54,7 +69,7 @@ export default function AddUserModal({
             type="text"
             fullWidth
             variant="standard"
-            value={user.lastName}
+            value={userModal.lastName}
             onChange={(e) => modalUserHandler({ lastName: e.target.value })}
           />
           <TextField
@@ -65,7 +80,7 @@ export default function AddUserModal({
             type="email"
             fullWidth
             variant="standard"
-            value={user.email}
+            value={userModal.email}
             onChange={(e) => modalUserHandler({ email: e.target.value })}
           />
           <TextField
@@ -75,13 +90,15 @@ export default function AddUserModal({
             type="text"
             fullWidth
             variant="standard"
-            value={user.image}
+            value={userModal.image}
             onChange={(e) => modalUserHandler({ image: e.target.value })}
           />
-          <Typography color={grey[500]} variant="caption" >*Required</Typography>
+          <Typography color={grey[500]} variant="caption">
+            *Required
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => close(false)}>Cancel</Button>
+          <Button onClick={handleModalClose}>Cancel</Button>
           <Button type="submit">Save</Button>
         </DialogActions>
       </form>
